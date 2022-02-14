@@ -1,6 +1,6 @@
 [
   {
-    "type": "block",
+    "type": "declarations",
     "named": true,
     "fields": {},
     "children": {
@@ -13,6 +13,21 @@
         },
         {
           "type": "property",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extends",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -113,7 +128,11 @@
       "required": true,
       "types": [
         {
-          "type": "block",
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "extends",
           "named": true
         },
         {
@@ -138,6 +157,10 @@
   {
     "type": "comment",
     "named": true
+  },
+  {
+    "type": "extending",
+    "named": false
   },
   {
     "type": "identifier",

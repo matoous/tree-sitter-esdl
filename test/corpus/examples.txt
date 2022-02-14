@@ -16,7 +16,7 @@ module default {
     (schema_declarations
       (type
         (identifier)
-        (block
+        (declarations
           (property
             (identifier)))))))
 

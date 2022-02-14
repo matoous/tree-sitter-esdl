@@ -22,12 +22,16 @@ module.exports = grammar({
     ),
 
     type: $ => seq(
+      optional('abstract'),
       'type',
       $.identifier,
-      $.block
+      optional($.extends),
+      $.declarations
     ),
     
-    block: $ => seq(
+    extends: $ => seq('extending', $.identifier),
+    
+    declarations: $ => seq(
       "{",
       repeat(
         choice(

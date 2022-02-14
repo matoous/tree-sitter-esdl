@@ -1,18 +1,5 @@
 ==================
-Empty Module
-==================
-
-module default {}
-
----
-
-(source_file
-  (module
-    (identifier)
-    (schema_declarations)))
-
-==================
-Module with single declaration
+Empty Type declaration
 ==================
 
 module default {
@@ -30,12 +17,11 @@ module default {
         (declarations)))))
 
 ==================
-Module with multiple declarations
+Abstract Type declaration
 ==================
 
 module default {
-    type Movie {}
-    type Review {}
+    abstract type Movie {}
 }
 
 ---
@@ -46,8 +32,24 @@ module default {
     (schema_declarations
       (type
         (identifier)
-        (declarations))
-      (type
-        (identifier)
         (declarations)))))
 
+==================
+Extending Type declaration
+==================
+
+module default {
+    type Movie extending Reviewable {}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (type
+        (identifier)
+        (extends
+          (identifier))
+        (declarations)))))
