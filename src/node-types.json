@@ -1,5 +1,10 @@
 [
   {
+    "type": "abstract",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "declarations",
     "named": true,
     "fields": {},
@@ -122,7 +127,18 @@
   {
     "type": "type",
     "named": true,
-    "fields": {},
+    "fields": {
+      "modifiers": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "abstract",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,

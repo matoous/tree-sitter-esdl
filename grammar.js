@@ -22,12 +22,14 @@ module.exports = grammar({
     ),
 
     type: $ => seq(
-      optional('abstract'),
+      field('modifiers', optional($.abstract)),
       'type',
       $.identifier,
       optional($.extends),
       $.declarations
     ),
+    
+    abstract: $ => 'abstract',
     
     extends: $ => seq('extending', $.identifier),
     

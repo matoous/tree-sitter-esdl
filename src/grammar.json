@@ -53,16 +53,20 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "STRING",
-              "value": "abstract"
-            },
-            {
-              "type": "BLANK"
-            }
-          ]
+          "type": "FIELD",
+          "name": "modifiers",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "abstract"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
         },
         {
           "type": "STRING",
@@ -89,6 +93,10 @@
           "name": "declarations"
         }
       ]
+    },
+    "abstract": {
+      "type": "STRING",
+      "value": "abstract"
     },
     "extends": {
       "type": "SEQ",
