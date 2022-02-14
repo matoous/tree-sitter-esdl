@@ -25,7 +25,7 @@ module default {
   (module
     (identifier)
     (schema_declarations
-      (type
+      (object_type
         (identifier)
         (declarations)))))
 
@@ -44,10 +44,10 @@ module default {
   (module
     (identifier)
     (schema_declarations
-      (type
+      (object_type
         (identifier)
         (declarations))
-      (type
+      (object_type
         (identifier)
         (declarations)))))
 

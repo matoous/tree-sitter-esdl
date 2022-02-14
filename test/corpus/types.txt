@@ -1,5 +1,5 @@
 ==================
-Empty Type declaration
+Empty type declaration
 ==================
 
 module default {
@@ -12,12 +12,12 @@ module default {
   (module
     (identifier)
     (schema_declarations
-      (type
+      (object_type
         (identifier)
         (declarations)))))
 
 ==================
-Abstract Type declaration
+Abstract type declaration
 ==================
 
 module default {
@@ -30,13 +30,13 @@ module default {
   (module
     (identifier)
     (schema_declarations
-      (type
-        (abstract)
+      (object_type
+        (modifier)
         (identifier)
         (declarations)))))
 
 ==================
-Extending Type declaration
+Extending type declaration
 ==================
 
 module default {
@@ -49,8 +49,29 @@ module default {
   (module
     (identifier)
     (schema_declarations
-      (type
+      (object_type
         (identifier)
         (extends
+          (identifier))
+        (declarations)))))
+
+==================
+Multiple inheritance type declaration
+==================
+
+module default {
+    type Movie extending Reviewable, Commentable {}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (extends
+          (identifier)
           (identifier))
         (declarations)))))
