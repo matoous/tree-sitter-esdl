@@ -1,0 +1,53 @@
+==================
+Empty Module
+==================
+
+module default {}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations)))
+
+==================
+Module with single declaration
+==================
+
+module default {
+    type Movie {}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (type
+        (identifier)
+        (block)))))
+
+==================
+Module with multiple declarations
+==================
+
+module default {
+    type Movie {}
+    type Review {}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (type
+        (identifier)
+        (block))
+      (type
+        (identifier)
+        (block)))))
+
