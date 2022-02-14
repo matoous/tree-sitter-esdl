@@ -194,6 +194,25 @@
     }
   },
   {
+    "type": "tuple",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type",
     "named": true,
     "fields": {},
@@ -207,6 +226,10 @@
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "tuple",
           "named": true
         }
       ]
@@ -234,6 +257,10 @@
   },
   {
     "type": ">",
+    "named": false
+  },
+  {
+    "type": "TODO",
     "named": false
   },
   {

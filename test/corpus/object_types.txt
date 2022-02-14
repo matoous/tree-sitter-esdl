@@ -75,3 +75,31 @@ module default {
           (identifier)
           (identifier))
         (declarations)))))
+
+==================
+Property
+==================
+
+module default {
+    type Movie {
+      property address -> str;
+      multi link friends -> User;
+    }
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (type))
+          (link
+            (modifier)
+            (identifier)
+            (identifier)))))))

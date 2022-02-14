@@ -17,9 +17,9 @@ module.exports = grammar({
     ),
 
     schema_declarations: $ => seq(
-      "{",
-      repeat($.object_type),
-      "}"
+      block(
+        repeat($.object_type),
+      )
     ),
 
     // SCHEMAS
@@ -34,14 +34,14 @@ module.exports = grammar({
     extends: $ => seq('extending', commaSep($.identifier)),
     
     declarations: $ => seq(
-      "{",
-      repeat(
-        choice(
-          $.property,
-          $.link
+      block(
+        repeat(
+          choice(
+            $.property,
+            $.link
+          )
         )
-      ),
-      "}"
+      )
     ),
     
     modifier: $ => choice(
@@ -50,6 +50,7 @@ module.exports = grammar({
       'abstract'
     ),
 
+    // PROPERTIES
     property: $ => seq(
       optional(repeat($.modifier)),
       'property',
@@ -59,6 +60,7 @@ module.exports = grammar({
       ';',
     ),
     
+    // LINKS
     link: $ => seq(
       optional(repeat($.modifier)),
       'link',
@@ -124,13 +126,23 @@ module.exports = grammar({
     ),
 
     scalar_type_def: $ => seq(
+      optional($.modifier),
       'scalar type',
       $.identifier,
-      'extending',
-      field('type', choice(
-        $.enum,
-        $._scalar_type,
-      )),
+      optional(
+        seq(
+          'extending',
+          commaSep(
+            field('supertype', choice(
+              $.enum,
+              $.type
+            )),
+          ),
+        ),
+      ),
+      optional(
+        block('TODO')
+      )
     ),
     
     enum: $ => seq(
@@ -147,14 +159,13 @@ module.exports = grammar({
       $._scalar_type,
       $.identifier,
       $.array,
+      $.tuple,
     ),
 
     identifier: $ => /[\w]+/,
 
     true: $ => "true",
-
     false: $ => "false",
-
     null: $ => "null",
 
     comment: $ => token(choice(
@@ -164,6 +175,10 @@ module.exports = grammar({
     _whitespace: $ => token(/\s/),
   }
 });
+
+function block (rule) {
+  return seq('{', rule, '}')
+}
 
 function commaSep (rule) {
   return seq(rule, repeat(seq(",", rule)))
