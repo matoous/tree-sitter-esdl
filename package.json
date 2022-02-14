@@ -1,0 +1,34 @@
+{
+  "name": "tree-sitter-esdl",
+  "version": "0.0.1",
+  "description": "ESDL grammer for tree-sitter.",
+  "main": "bindings/node",
+  "keywords": [
+    "parsers",
+    "tree-sitter",
+    "esdl",
+    "edge-db"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matoous/tree-sitter-esdl"
+  },
+  "author": "Matous Dzivjak",
+  "license": "MIT",
+  "scripts": {
+    "build": "tree-sitter generate && node-gyp build",
+    "test": "tree-sitter test"
+  },
+  "dependencies": {
+    "nan": "^2.15.0",
+    "tree-sitter-cli": "^0.20.1"
+  },
+  "tree-sitter": [
+    {
+      "scope": "source.jsonnet",
+      "file-types": [
+        "jsonnet"
+      ]
+    }
+  ]
+}
