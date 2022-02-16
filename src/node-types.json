@@ -1,5 +1,47 @@
 [
   {
+    "type": "annotation",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        },
+        {
+          "type": "val",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "argspec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "array",
     "named": true,
     "fields": {},
@@ -13,6 +55,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "constr_expr",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "declarations",
@@ -194,6 +241,11 @@
     }
   },
   {
+    "type": "subj_expr",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "tuple",
     "named": true,
     "fields": {},
@@ -236,6 +288,25 @@
     }
   },
   {
+    "type": "val",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "str",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": ",",
     "named": false
   },
@@ -245,6 +316,10 @@
   },
   {
     "type": ":",
+    "named": false
+  },
+  {
+    "type": ":=",
     "named": false
   },
   {
@@ -264,7 +339,19 @@
     "named": false
   },
   {
+    "type": "__subject__",
+    "named": false
+  },
+  {
     "type": "abstract",
+    "named": false
+  },
+  {
+    "type": "annotation",
+    "named": false
+  },
+  {
+    "type": "anytype",
     "named": false
   },
   {
@@ -304,6 +391,10 @@
     "named": true
   },
   {
+    "type": "contraint",
+    "named": false
+  },
+  {
     "type": "datetime",
     "named": false
   },
@@ -312,11 +403,19 @@
     "named": false
   },
   {
+    "type": "delegated",
+    "named": false
+  },
+  {
     "type": "duration",
     "named": false
   },
   {
     "type": "enum",
+    "named": false
+  },
+  {
+    "type": "errmessage",
     "named": false
   },
   {
@@ -334,6 +433,10 @@
   {
     "type": "identifier",
     "named": true
+  },
+  {
+    "type": "inheritable",
+    "named": false
   },
   {
     "type": "int16",
@@ -361,6 +464,10 @@
   },
   {
     "type": "multi",
+    "named": false
+  },
+  {
+    "type": "on",
     "named": false
   },
   {
@@ -392,11 +499,19 @@
     "named": false
   },
   {
+    "type": "str",
+    "named": true
+  },
+  {
     "type": "tuple",
     "named": false
   },
   {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "using",
     "named": false
   },
   {

@@ -47,9 +47,54 @@ module.exports = grammar({
     modifier: $ => choice(
       choice('required', 'optional'),
       choice('single', 'multi'),
-      'abstract'
+      choice('abstract', 'delegated'),
+      'inheritable',
     ),
 
+    argspec: $ => commaSep(
+      choice(
+        $.identifier, // value instead (or as well?)
+        seq($.identifier, ':', $._scalar_type)
+      )
+    ),
+    
+    // TODO
+    subj_expr: $ => '__subject__',
+    // TODO
+    constr_expr: $ => '__subject__',
+
+    val: $ => choice(
+      $.str,
+      $.identifier,
+      // num
+    ),
+    
+    // ANNOTATION
+    annotation: $ => choice(
+      $._abstract_annotation,
+      $._concrete_annotation,
+    ),
+    
+    _concrete_annotation: $ => seq(
+      'annotation',
+      $.identifier,
+      ':=',
+      $.val,
+      ';',
+    ),
+        
+    _abstract_annotation: $ => seq(
+      optional(repeat($.modifier)),
+      'annotation',
+      $.identifier,
+      optional(
+        block(
+          repeat($.annotation),
+        )
+      ),
+      ";",
+    ),
+    
     // PROPERTIES
     property: $ => seq(
       optional(repeat($.modifier)),
@@ -69,6 +114,26 @@ module.exports = grammar({
       $.identifier,
       ';',
     ),
+    
+    // CONSTRAIN
+    contraint: $ => seq(
+      optional($.modifier),
+      'contraint',
+      $.identifier,
+      optional($.argspec),
+      optional(seq('on', $.subj_expr)),
+      optional($.extends),
+      block(
+        repeat(
+          choice(
+            seq('using', $.constr_expr),
+            seq('errmessage', ':=', $.str)
+          )
+        )
+      )
+    ),
+    
+    str: $ => /'.*'/,
     
     // PRIMITIVES
     _scalar_type: $ => choice(
@@ -91,6 +156,7 @@ module.exports = grammar({
       'cal::local_time',
       'cal::relative_duration',
       'sequence',
+      'anytype',
     ),
     
     array: $ => seq(
