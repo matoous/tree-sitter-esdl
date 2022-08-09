@@ -25,9 +25,12 @@
   },
   "tree-sitter": [
     {
-      "scope": "source.jsonnet",
+      "scope": "source.esdl",
       "file-types": [
-        "jsonnet"
+        "esdl"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
       ]
     }
   ]
