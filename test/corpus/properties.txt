@@ -20,3 +20,104 @@ module default {
           (property
             (identifier)
             (type)))))))
+
+
+==================
+Extending Property 
+==================
+
+module default {
+    type Movie {
+      property address extending address_base -> str;
+    }
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (extending
+              (type
+                (identifier)))
+            (type)))))))
+
+==================
+Property with modifiers 
+==================
+
+module default {
+    type Movie {
+        required property address -> str;
+        required overloaded property name -> str;
+    }
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (modifier)
+            (identifier)
+            (type))
+          (property
+            (modifier)
+            (modifier)
+            (identifier)
+            (type)))))))
+      
+==================
+Abstract Property 
+==================
+
+module default {
+    abstract property addess_base {}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (property
+        (modifier)
+        (identifier)
+        (declarations)))))
+
+==================
+Abstract Property with annotation
+==================
+
+module default {
+    abstract property addess_base {
+      annotation title := 'Mailing address';
+    }
+}
+
+---
+
+ (source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (property
+        (modifier)
+        (identifier)
+        (declarations
+          (annotation
+            (identifier)
+            (expr
+              (str))))))))

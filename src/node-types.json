@@ -1,26 +1,59 @@
 [
   {
+    "type": "alias",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "annotation",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "annotation",
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "expr",
           "named": true
         },
         {
           "type": "modifier",
-          "named": true
-        },
-        {
-          "type": "val",
           "named": true
         }
       ]
@@ -57,9 +90,84 @@
     }
   },
   {
-    "type": "constr_expr",
+    "type": "computed",
     "named": true,
-    "fields": {}
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "constraint",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "argspec",
+          "named": true
+        },
+        {
+          "type": "computed",
+          "named": true
+        },
+        {
+          "type": "except",
+          "named": true
+        },
+        {
+          "type": "extending",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        },
+        {
+          "type": "on",
+          "named": true
+        },
+        {
+          "type": "using",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "declarations",
@@ -69,6 +177,18 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "constraint",
+          "named": true
+        },
+        {
+          "type": "index",
+          "named": true
+        },
         {
           "type": "link",
           "named": true
@@ -96,7 +216,107 @@
     }
   },
   {
-    "type": "extends",
+    "type": "except",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "expr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "str",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extending",
+    "named": true,
+    "fields": {
+      "supertype": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "enum",
+            "named": true
+          },
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "function",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "argspec",
+          "named": true
+        },
+        {
+          "type": "computed",
+          "named": true
+        },
+        {
+          "type": "returnspec",
+          "named": true
+        },
+        {
+          "type": "uselang",
+          "named": true
+        },
+        {
+          "type": "using",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "index",
     "named": true,
     "fields": {},
     "children": {
@@ -104,7 +324,15 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "except",
+          "named": true
+        },
+        {
+          "type": "on",
           "named": true
         }
       ]
@@ -113,17 +341,40 @@
   {
     "type": "link",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "identifier",
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "expr",
+          "named": true
+        },
+        {
+          "type": "extending",
           "named": true
         },
         {
           "type": "modifier",
+          "named": true
+        },
+        {
+          "type": "type",
           "named": true
         }
       ]
@@ -163,7 +414,18 @@
   {
     "type": "object_type",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -173,11 +435,7 @@
           "named": true
         },
         {
-          "type": "extends",
-          "named": true
-        },
-        {
-          "type": "identifier",
+          "type": "extending",
           "named": true
         },
         {
@@ -188,15 +446,49 @@
     }
   },
   {
-    "type": "property",
+    "type": "on",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "expr",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "property",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "expr",
+          "named": true
+        },
+        {
+          "type": "extending",
           "named": true
         },
         {
@@ -211,6 +503,55 @@
     }
   },
   {
+    "type": "returnspec",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "scalar_type_def",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "declarations",
+          "named": true
+        },
+        {
+          "type": "extending",
+          "named": true
+        },
+        {
+          "type": "modifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "schema_declarations",
     "named": true,
     "fields": {},
@@ -219,7 +560,35 @@
       "required": false,
       "types": [
         {
+          "type": "alias",
+          "named": true
+        },
+        {
+          "type": "annotation",
+          "named": true
+        },
+        {
+          "type": "constraint",
+          "named": true
+        },
+        {
+          "type": "function",
+          "named": true
+        },
+        {
+          "type": "link",
+          "named": true
+        },
+        {
           "type": "object_type",
+          "named": true
+        },
+        {
+          "type": "property",
+          "named": true
+        },
+        {
+          "type": "scalar_type_def",
           "named": true
         }
       ]
@@ -239,11 +608,6 @@
         }
       ]
     }
-  },
-  {
-    "type": "subj_expr",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "tuple",
@@ -288,7 +652,23 @@
     }
   },
   {
-    "type": "val",
+    "type": "uselang",
+    "named": true,
+    "fields": {
+      "language": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "using",
     "named": true,
     "fields": {},
     "children": {
@@ -296,15 +676,19 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "str",
+          "type": "expr",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "(",
+    "named": false
+  },
+  {
+    "type": ")",
+    "named": false
   },
   {
     "type": ",",
@@ -335,15 +719,11 @@
     "named": false
   },
   {
-    "type": "TODO",
-    "named": false
-  },
-  {
-    "type": "__subject__",
-    "named": false
-  },
-  {
     "type": "abstract",
+    "named": false
+  },
+  {
+    "type": "alias",
     "named": false
   },
   {
@@ -391,7 +771,7 @@
     "named": true
   },
   {
-    "type": "contraint",
+    "type": "constraint",
     "named": false
   },
   {
@@ -403,11 +783,11 @@
     "named": false
   },
   {
-    "type": "delegated",
+    "type": "duration",
     "named": false
   },
   {
-    "type": "duration",
+    "type": "edgedb",
     "named": false
   },
   {
@@ -415,11 +795,15 @@
     "named": false
   },
   {
-    "type": "errmessage",
+    "type": "except",
     "named": false
   },
   {
     "type": "extending",
+    "named": false
+  },
+  {
+    "type": "extension",
     "named": false
   },
   {
@@ -431,8 +815,16 @@
     "named": false
   },
   {
+    "type": "function",
+    "named": false
+  },
+  {
     "type": "identifier",
     "named": true
+  },
+  {
+    "type": "index",
+    "named": false
   },
   {
     "type": "inheritable",
@@ -475,6 +867,10 @@
     "named": false
   },
   {
+    "type": "overloaded",
+    "named": false
+  },
+  {
     "type": "property",
     "named": false
   },
@@ -483,11 +879,19 @@
     "named": false
   },
   {
+    "type": "scalar",
+    "named": false
+  },
+  {
     "type": "scalar type",
     "named": false
   },
   {
     "type": "sequence",
+    "named": false
+  },
+  {
+    "type": "set of",
     "named": false
   },
   {

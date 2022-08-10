@@ -18,124 +18,226 @@ module.exports = grammar({
 
     schema_declarations: $ => seq(
       block(
-        repeat($.object_type),
-      )
+        repeat(choice(
+          $.object_type,
+          $.scalar_type_def,
+          $.link,
+          $.property,
+          $.annotation,
+          $.constraint,
+          $.function,
+          $.alias,
+        )),
+      ),
     ),
 
     // SCHEMAS
+
     object_type: $ => seq(
-      optional(repeat($.modifier)),
+      optional($.modifier),
       'type',
-      $.identifier,
-      optional($.extends),
+      field('name', $.identifier),
+      optional($.extending),
       $.declarations
     ),
     
-    extends: $ => seq('extending', commaSep($.identifier)),
+    declarations: $ => block(
+      repeat(
+        choice(
+          $.property,
+          $.link,
+          $.annotation,
+          $.constraint,
+          $.index,
+        ),
+      ),
+    ),
+
+    scalar_type_def: $ => seq(
+      optional(repeat($.modifier)),
+      'scalar',
+      'type',
+      field('name', $.identifier),
+      optional($.extending),
+      optional($.declarations),
+    ),
+        
+    link: $ => seq(
+      optional(repeat($.modifier)),
+      'link',
+      field('name', $.identifier),
+      optional($.extending),
+      optional(seq('->', $.type)),
+      optional(choice(
+        seq(':=', $.expr),
+        $.declarations,
+      )),
+      optional(';'),
+    ),
     
-    declarations: $ => seq(
-      block(
-        repeat(
-          choice(
-            $.property,
-            $.link
-          )
-        )
-      )
+    property: $ => seq(
+      optional(repeat($.modifier)),
+      'property',
+      field('name', $.identifier),
+      optional($.extending),
+      optional(seq('->', $.type)),
+      optional(choice(
+        seq(':=', $.expr),
+        $.declarations,
+      )),
+      optional(';'),
+    ),
+
+    annotation: $ => seq(
+      optional(repeat($.modifier)),
+      'annotation',
+      field('name', $.identifier),
+      choice(
+        seq(':=', $.expr),
+        repeat($.annotation),
+      ),
+      ';',
+    ),
+    
+    constraint: $ => seq(
+      optional($.modifier),
+      'constraint',
+      field('name', $.identifier),
+      optional($.argspec),
+      optional($.on),
+      optional($.except),
+      optional($.extending),
+      optional(block(
+        repeat(choice(
+          $.using,
+          $.computed,
+          $.annotation,
+        )),
+      )),
+      ';',
+    ),
+    
+    index: $ => seq(
+      'index',
+      $.on,
+      optional($.except),
+      optional(block(repeat(
+        $.annotation,
+      ))),
+      ';'
+    ),
+    
+    alias: $ => seq(
+      'alias',
+      field('name', $.identifier),
+      choice(
+        seq(':=', $.expr),
+        block(
+          seq('using', $.expr),
+          optional(repeat($.annotation))
+        ),
+      ),
+      ';'
+    ),
+    
+    function: $ => seq(
+      'function',
+      field('name', $.identifier),
+      '(',
+      optional($.argspec),
+      ')',
+      '->',
+      $.returnspec,
+      optional(choice(
+        seq('using', '(', 'edgedb', ')'),
+        $.uselang,
+      )),
+      optional(block(repeat(choice(
+        $.annotation,
+        $.computed,
+        $.using,
+        $.uselang,
+      )))),
+      ';'
+    ),
+    
+    extension: $ => seq(
+      'using',
+      'extension',
+      field('name', $.identifier),
+      ';',
+    ),
+    
+    // PARTS
+
+    extending: $ => seq('extending', delim(
+      field('supertype', choice(
+        $.enum,
+        $.type,
+      )),
+    )),
+    
+    using: $ => seq(
+      'using',
+      parens($.expr),
+      ';',
+    ),
+
+    uselang: $ => seq(
+      'using',
+      field('language', $.identifier, $.str),
+    ),
+    
+    on: $ => seq(
+      'on',
+      parens($.expr),
+    ),
+    
+    except: $ => seq(
+      'except',
+      parens($.expr),
+    ),
+    
+    computed: $ => seq(
+      field('name', $.identifier),
+      ':=',
+      $.expr,
+      ';'
     ),
     
     modifier: $ => choice(
+      'abstract',
+      'overloaded',
       choice('required', 'optional'),
       choice('single', 'multi'),
-      choice('abstract', 'delegated'),
       'inheritable',
     ),
 
-    argspec: $ => commaSep(
-      choice(
+    argspec: $ => seq(
+      '(',
+      delim(choice(
         $.identifier, // value instead (or as well?)
         seq($.identifier, ':', $._scalar_type)
-      )
+      )),
+      ')',
     ),
     
-    // TODO
-    subj_expr: $ => '__subject__',
-    // TODO
-    constr_expr: $ => '__subject__',
+    returnspec: $ => seq(
+      optional(choice('set of', 'optional')),
+      $.type,
+    ),
 
-    val: $ => choice(
+    // TODO: This should be proper expression parsing.
+    expr: $ => choice(
       $.str,
       $.identifier,
       // num
     ),
     
-    // ANNOTATION
-    annotation: $ => choice(
-      $._abstract_annotation,
-      $._concrete_annotation,
-    ),
-    
-    _concrete_annotation: $ => seq(
-      'annotation',
-      $.identifier,
-      ':=',
-      $.val,
-      ';',
-    ),
-        
-    _abstract_annotation: $ => seq(
-      optional(repeat($.modifier)),
-      'annotation',
-      $.identifier,
-      optional(
-        block(
-          repeat($.annotation),
-        )
-      ),
-      ";",
-    ),
-    
-    // PROPERTIES
-    property: $ => seq(
-      optional(repeat($.modifier)),
-      'property',
-      $.identifier,
-      '->',
-      $.type,
-      ';',
-    ),
-    
-    // LINKS
-    link: $ => seq(
-      optional(repeat($.modifier)),
-      'link',
-      $.identifier,
-      '->',
-      $.identifier,
-      ';',
-    ),
-    
-    // CONSTRAIN
-    contraint: $ => seq(
-      optional($.modifier),
-      'contraint',
-      $.identifier,
-      optional($.argspec),
-      optional(seq('on', $.subj_expr)),
-      optional($.extends),
-      block(
-        repeat(
-          choice(
-            seq('using', $.constr_expr),
-            seq('errmessage', ':=', $.str)
-          )
-        )
-      )
-    ),
-    
+    // PRIMITIVES
+
     str: $ => /'.*'/,
     
-    // PRIMITIVES
     _scalar_type: $ => choice(
       'str',
       'bool',
@@ -174,14 +276,14 @@ module.exports = grammar({
     _tuple: $ => seq(
       'tuple',
       '<',
-      commaSep($.type),
+      delim($.type),
       '>'
     ),
 
     _named_tuple: $ => seq(
       'tuple',
       '<',
-      commaSep(
+      delim(
         seq(
           $.identifier,
           ':',
@@ -190,33 +292,13 @@ module.exports = grammar({
       ),
       '>'
     ),
-
-    scalar_type_def: $ => seq(
-      optional($.modifier),
-      'scalar type',
-      $.identifier,
-      optional(
-        seq(
-          'extending',
-          commaSep(
-            field('supertype', choice(
-              $.enum,
-              $.type
-            )),
-          ),
-        ),
-      ),
-      optional(
-        block('TODO')
-      )
-    ),
     
     enum: $ => seq(
       'scalar type',
       seq(
         'enum',
         '<',
-        commaSep($.identifier),
+        delim($.identifier),
         '>',
       )       
     ),
@@ -246,7 +328,11 @@ function block (rule) {
   return seq('{', rule, '}')
 }
 
-function commaSep (rule) {
-  return seq(rule, repeat(seq(",", rule)))
+function parens (rule) {
+  return seq('(', rule, ')')
+}
+
+function delim (rule, delimiter = ',') {
+  return seq(rule, repeat(seq(delimiter, rule)))
 }
 
