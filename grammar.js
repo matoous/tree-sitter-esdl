@@ -6,6 +6,34 @@ module.exports = grammar({
     $._whitespace,
   ],
 
+  precedences: $ => [
+    [
+      'member',
+      'call',
+      // $.update_expression,
+      'unary_void',
+      'binary_exp',
+      'binary_times',
+      'binary_plus',
+      'binary_shift',
+      'binary_compare',
+      'binary_relation',
+      'binary_equality',
+      'bitwise_and',
+      'bitwise_xor',
+      'bitwise_or',
+      'logical_and',
+      'logical_or',
+      'ternary',
+      // $.sequence_expression,
+      // $.arrow_function
+    ],
+    // ['assign', $.primary_expression],
+    ['member', 'new', 'call', $.expression],
+    ['declaration', 'literal'],
+    // [$.primary_expression, $.statement_block, 'object'],
+  ],
+
   rules: {
     source_file: $ => repeat($.module),
     
@@ -69,7 +97,7 @@ module.exports = grammar({
       optional($.extending),
       optional(seq('->', $.type)),
       optional(choice(
-        seq(':=', $.expr),
+        seq(':=', $.expression),
         $.declarations,
       )),
       optional(';'),
@@ -79,12 +107,16 @@ module.exports = grammar({
       optional(repeat($.modifier)),
       'property',
       field('name', $.identifier),
-      optional($.extending),
-      optional(seq('->', $.type)),
-      optional(choice(
-        seq(':=', $.expr),
-        $.declarations,
-      )),
+      choice(
+        seq(
+          optional($.extending),
+          optional(seq('->', $.type)),
+        ),
+        optional(choice(
+          seq(':=', $.expression),
+          $.declarations,
+        )),
+      ),
       optional(';'),
     ),
 
@@ -93,7 +125,7 @@ module.exports = grammar({
       'annotation',
       field('name', $.identifier),
       choice(
-        seq(':=', $.expr),
+        seq(':=', $.expression),
         repeat($.annotation),
       ),
       ';',
@@ -131,9 +163,9 @@ module.exports = grammar({
       'alias',
       field('name', $.identifier),
       choice(
-        seq(':=', $.expr),
+        seq(':=', $.expression),
         block(
-          seq('using', $.expr),
+          seq('using', $.expression),
           optional(repeat($.annotation))
         ),
       ),
@@ -179,29 +211,29 @@ module.exports = grammar({
     
     using: $ => seq(
       'using',
-      parens($.expr),
+      parens($.expression),
       ';',
     ),
 
     uselang: $ => seq(
       'using',
-      field('language', $.identifier, $.str),
+      field('language', $.identifier, $.string),
     ),
     
     on: $ => seq(
       'on',
-      parens($.expr),
+      parens($.expression),
     ),
     
     except: $ => seq(
       'except',
-      parens($.expr),
+      parens($.expression),
     ),
     
     computed: $ => seq(
       field('name', $.identifier),
       ':=',
-      $.expr,
+      $.expression,
       ';'
     ),
     
@@ -216,7 +248,7 @@ module.exports = grammar({
     argspec: $ => seq(
       '(',
       delim(choice(
-        $.identifier, // value instead (or as well?)
+        $.expression, // value instead (or as well?)
         seq($.identifier, ':', $._scalar_type)
       )),
       ')',
@@ -228,15 +260,78 @@ module.exports = grammar({
     ),
 
     // TODO: This should be proper expression parsing.
-    expr: $ => choice(
-      $.str,
+    expression: $ => choice(
+      $.string,
+      $.true,
+      $.false,
+      $.null,
       $.identifier,
-      // num
+      seq('global', $.identifier),
+      $.fncall,
+      $.binary_expression,
+      parens($.expression),
+    ),
+    
+    fncall: $ => seq(
+      field('name', $.identifier),
+      '(',
+      optional(delim($.expression)),
+      ')',
+    ),
+    
+    binary_expression: $ => choice(
+      ...[
+        ['&&', 'logical_and'],
+        ['||', 'logical_or'],
+        ['>>', 'binary_shift'],
+        ['<<', 'binary_shift'],
+        ['&', 'bitwise_and'],
+        ['^', 'bitwise_xor'],
+        ['|', 'bitwise_or'],
+        ['+', 'binary_plus'],
+        ['-', 'binary_plus'],
+        ['*', 'binary_times'],
+        ['/', 'binary_times'],
+        ['%', 'binary_times'],
+        ['<', 'binary_relation'],
+        ['<=', 'binary_relation'],
+        ['=', 'binary_equality'],
+        ['!=', 'binary_equality'],
+        ['>=', 'binary_relation'],
+        ['>', 'binary_relation'],
+      ].map(([operator, precedence, associativity]) =>
+        (associativity === 'right' ? prec.right : prec.left)(precedence, seq(
+          field('left', $.expression),
+          field('operator', operator),
+          field('right', $.expression)
+        ))
+      )
     ),
     
     // PRIMITIVES
 
-    str: $ => /'.*'/,
+    string: $ => seq(
+      "'",
+      repeat(choice(
+        alias($.unescaped_single_string_fragment, $.string_fragment),
+        $.escape_sequence
+      )),
+      "'"
+    ),
+    
+    unescaped_single_string_fragment: $ =>
+      token.immediate(prec(1, /[^'\\]+/)),
+    
+    escape_sequence: $ => token.immediate(seq(
+      '\\',
+      choice(
+        /[^xu0-7]/,
+        /[0-7]{1,3}/,
+        /x[0-9a-fA-F]{2}/,
+        /u[0-9a-fA-F]{4}/,
+        /u{[0-9a-fA-F]+}/
+      )
+    )),
     
     _scalar_type: $ => choice(
       'str',
@@ -310,7 +405,16 @@ module.exports = grammar({
       $.tuple,
     ),
 
-    identifier: $ => /[\w]+/,
+    identifier: $ => {
+      const alpha = /[^\x00-\x1F\s\p{Zs}0-9:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/
+      const alphanumeric = /[^\x00-\x1F\s\p{Zs}:;`"'@#.,|^&<=>+\-*/\\%?!~()\[\]{}\uFEFF\u2060\u200B]|\\u[0-9a-fA-F]{4}|\\u\{[0-9a-fA-F]+\}/
+      return token(seq(
+        // __subject__ shorthand
+        optional('.'),
+        alpha,
+        repeat(alphanumeric),
+      ))
+    },
 
     true: $ => "true",
     false: $ => "false",

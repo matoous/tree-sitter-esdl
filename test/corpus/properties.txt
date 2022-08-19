@@ -109,7 +109,7 @@ module default {
 
 ---
 
- (source_file
+(source_file
   (module
     (identifier)
     (schema_declarations
@@ -119,5 +119,35 @@ module default {
         (declarations
           (annotation
             (identifier)
-            (expr
-              (str))))))))
+            (expression
+              (string
+                (string_fragment)))))))))
+
+==================
+Computed Property
+==================
+
+module default {
+    type Movie {
+        property is_self := (.id = global current_user_id);
+    }
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
+            (identifier)
+            (expression
+              (expression
+                (binary_expression
+                  (expression
+                    (identifier))
+                  (expression
+                    (identifier)))))))))))
