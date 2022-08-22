@@ -1,0 +1,26 @@
+==================
+Scalar declaration
+==================
+
+module default {
+	scalar type posint64 extending int64 {
+	    constraint min_value(0);
+	}
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (scalar_type_def
+        (identifier)
+        (extending
+          (type))
+        (declarations
+          (constraint
+            (identifier)
+            (argspec
+              (expression
+                (number)))))))))

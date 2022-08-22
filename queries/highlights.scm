@@ -31,7 +31,8 @@
 
 ; Links
 (identifier) @variable
-(str) @string
+(string) @string
+(edgeql_fragment) @string
 
 ; Annotations
 ; (annotation) @property

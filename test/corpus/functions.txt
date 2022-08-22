@@ -1,0 +1,23 @@
+==================
+Function declaration
+==================
+
+module default {
+    function foo(s: str) -> str
+      using (select s ++ <str>len(a));
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (function
+        (identifier)
+        (argspec
+          (identifier))
+        (returnspec
+          (type))
+        (using
+          (edgeql_fragment))))))

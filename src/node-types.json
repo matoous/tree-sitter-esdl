@@ -65,7 +65,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "expression",
@@ -371,6 +371,10 @@
           "named": true
         },
         {
+          "type": "number",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -460,10 +464,6 @@
         },
         {
           "type": "returnspec",
-          "named": true
-        },
-        {
-          "type": "uselang",
           "named": true
         },
         {
@@ -829,12 +829,12 @@
     }
   },
   {
-    "type": "uselang",
+    "type": "using",
     "named": true,
     "fields": {
       "language": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -842,18 +842,17 @@
           }
         ]
       }
-    }
-  },
-  {
-    "type": "using",
-    "named": true,
-    "fields": {},
+    },
     "children": {
       "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "expression",
+          "type": "edgeql_fragment",
+          "named": true
+        },
+        {
+          "type": "string",
           "named": true
         }
       ]
@@ -1024,8 +1023,8 @@
     "named": false
   },
   {
-    "type": "edgedb",
-    "named": false
+    "type": "edgeql_fragment",
+    "named": true
   },
   {
     "type": "enum",
@@ -1109,6 +1108,10 @@
   },
   {
     "type": "null",
+    "named": true
+  },
+  {
+    "type": "number",
     "named": true
   },
   {
