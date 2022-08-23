@@ -15,6 +15,7 @@
   "required"
   "optional"
   "extension"
+  "function"
 ] @keyword
 
 (modifier) @keyword
