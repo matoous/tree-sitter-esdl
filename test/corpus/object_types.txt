@@ -51,8 +51,8 @@ module default {
     (schema_declarations
       (object_type
         (identifier)
-        (extends
-          (identifier))
+        (extending
+          (type (identifier)))
         (declarations)))))
 
 ==================
@@ -71,9 +71,9 @@ module default {
     (schema_declarations
       (object_type
         (identifier)
-        (extends
-          (identifier)
-          (identifier))
+        (extending
+          (type (identifier))
+          (type (identifier)))
         (declarations)))))
 
 ==================
@@ -83,7 +83,6 @@ Property
 module default {
     type Movie {
       property address -> str;
-      multi link friends -> User;
     }
 }
 
@@ -98,8 +97,31 @@ module default {
         (declarations
           (property
             (identifier)
-            (type))
-          (link
-            (modifier)
+            (type)))))))
+
+
+==================
+Extending Property 
+==================
+
+module default {
+    type Movie {
+      property address extending address_base -> str;
+    }
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (object_type
+        (identifier)
+        (declarations
+          (property
             (identifier)
-            (identifier)))))))
+            (extending
+              (type
+                (identifier)))
+            (type)))))))

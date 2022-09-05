@@ -1,0 +1,17 @@
+==================
+Abstract Annotation
+==================
+
+module default {
+	abstract annotation title;
+}
+
+---
+
+(source_file
+  (module
+    (identifier)
+    (schema_declarations
+      (annotation
+        (modifier)
+        (identifier)))))
